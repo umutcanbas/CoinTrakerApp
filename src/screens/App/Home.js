@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -6,58 +6,87 @@ import {
   FlatList,
   StyleSheet,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 
-const Home = () => {
-  const [data, setData] = React.useState([]);
+import routes from '../../navigation/routes';
 
-  const getData = async () => {
-    try {
-      const response = await fetch(
-        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=25&page=1&sparkline=false',
-      );
+import TopMenu from '../../components/TopMenu';
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+import Plus from '../../assets/icons/add.svg';
 
-      const json = await response.json();
-      setData(json);
-    } catch (error) {
-      console.log('getData Error: ', error);
-    }
-  };
+import {getData} from '../../hooks/useFetch';
+
+const Home = ({navigation}) => {
+  const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    getData();
-  }, []);
+    const fetchCoins = async () => {
+      const newData = await getData(page);
+      setData(prevData => [...prevData, ...newData]);
+
+      if (newData.length < 25) {
+        setHasMore(false);
+      }
+    };
+
+    fetchCoins();
+  }, [page]);
+
+  const nextPage = () => setPage(prevPage => prevPage + 1);
 
   const renderItem = ({item}) => (
-    <View style={styles.itemContainer}>
-      <Image source={{uri: item.image}} style={styles.coinImage} />
-      <View style={styles.infoContainer}>
-        <Text style={styles.name}>
-          {item.name} ({item.symbol.toUpperCase()})
-        </Text>
-        <Text style={styles.details}>
-          Price: ${item.current_price.toLocaleString()}
-        </Text>
-        <Text style={styles.details}>
-          Market Cap: ${item.market_cap.toLocaleString()}
-        </Text>
-        <Text style={styles.details}>
-          24h Change: {item.price_change_percentage_24h.toFixed(2)}%
-        </Text>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() =>
+        navigation.navigate(routes.OUTTAB_NAVIGATOR, {
+          screen: routes.COINDETAIL,
+          params: {item},
+        })
+      }>
+      <View style={styles.itemContainer}>
+        <Image source={{uri: item?.image}} style={styles.coinImage} />
+
+        <View style={styles.infoContainer}>
+          <Text style={styles?.nameText}>
+            {item.name} ({item.symbol.toUpperCase()})
+          </Text>
+
+          <Text style={styles.priceText}>
+            Price: ${item?.current_price.toLocaleString()}
+          </Text>
+
+          <Text style={styles.marketText}>
+            Market Cap: ${item?.market_cap.toLocaleString()}
+          </Text>
+
+          <Text style={styles.changeText}>
+            24h Change: {item?.price_change_percentage_24h.toFixed(2)}%
+          </Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
     <SafeAreaView style={styles.container}>
+      <TopMenu title="Coin Tracker" />
       <FlatList
         data={data}
-        keyExtractor={item => item.id}
+        keyExtractor={(item, index) => `${item.id}-${index}`}
         renderItem={renderItem}
+        bounces={false}
+        ListFooterComponent={
+          hasMore && (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={nextPage} style={styles.button}>
+                <Plus width={50} height={50} />
+              </TouchableOpacity>
+            </View>
+          )
+        }
       />
     </SafeAreaView>
   );
@@ -66,19 +95,15 @@ const Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#2D4840',
   },
   itemContainer: {
     flexDirection: 'row',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#e0e0e0e0',
     padding: 15,
     marginVertical: 8,
     borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 3,
+    marginHorizontal: 5,
   },
   coinImage: {
     width: 50,
@@ -89,13 +114,37 @@ const styles = StyleSheet.create({
   infoContainer: {
     flex: 1,
   },
-  name: {
-    fontSize: 16,
+  nameText: {
+    fontSize: 26,
     fontWeight: 'bold',
+    color: 'black',
   },
-  details: {
+  priceText: {
+    fontSize: 18,
+    color: 'black',
+    fontWeight: '600',
+  },
+  marketText: {
     fontSize: 14,
-    color: '#666',
+    color: 'black',
+    fontWeight: '400',
+  },
+  changeText: {
+    fontSize: 16,
+    color: 'green',
+    fontWeight: '800',
+  },
+  buttonContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 15,
+  },
+  button: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: 'black',
   },
 });
 
