@@ -21,12 +21,11 @@ const AppNavigator = () => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
-          borderTopWidth: 1,
-          backgroundColor: '#6a5acd',
+          borderTopWidth: 0.4,
+          backgroundColor: '#2D4840',
         },
         tabBarIcon: ({focused}) => {
           let IconComponent;
-
           if (route.name === routes.HOME) {
             IconComponent = focused ? iconList.homeFill : iconList.home;
           }
