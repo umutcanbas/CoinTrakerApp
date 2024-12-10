@@ -2,10 +2,21 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 
 import BackIcon from '../assets/icons/back.svg';
+import Heart from '../assets/icons/heart-fill.svg';
+import Settings from '../assets/icons/settings.svg';
 
-const TopMenu = ({onPressLeft, title, onPressRight, leftIcon = 'Back'}) => {
+const TopMenu = ({
+  onPressLeft,
+  title,
+  onPressRight,
+  leftIcon = 'Back',
+  rightIcon,
+}) => {
   const icons = {
     Back: <BackIcon width={28} height={28} />,
+    Heart: <Heart width={28} height={28} />,
+    HeartRed: <Heart width={28} height={28} fill="red" />,
+    Settings: <Settings width={28} height={28} />,
   };
 
   return (
