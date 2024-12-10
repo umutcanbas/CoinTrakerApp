@@ -6,7 +6,8 @@ export const routes = {
   LOGIN: 'Login',
   SINGUP: 'SingUp',
   HOME: 'Home',
-  COINDETAIL:'CoinDetail'
+  FAVORITES: 'Favorites',
+  COINDETAIL: 'CoinDetail',
 };
 
-export default routes
+export default routes;
