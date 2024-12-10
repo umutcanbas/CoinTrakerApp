@@ -7,13 +7,12 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 
 import routes from '../../navigation/routes';
 
 import TopMenu from '../../components/TopMenu';
-
-import Plus from '../../assets/icons/add.svg';
 
 import {getData} from '../../hooks/useFetch';
 
@@ -63,7 +62,13 @@ const Home = ({navigation}) => {
           </Text>
 
           <Text style={styles.changeText}>
-            24h Change: {item?.price_change_percentage_24h.toFixed(2)}%
+            24h Change:{' '}
+            <Text
+              style={{
+                color: item.price_change_percentage_24h < 0 ? 'red' : 'green',
+              }}>
+              {item?.price_change_percentage_24h.toFixed(2)}%
+            </Text>
           </Text>
         </View>
       </View>
@@ -78,12 +83,12 @@ const Home = ({navigation}) => {
         keyExtractor={(item, index) => `${item.id}-${index}`}
         renderItem={renderItem}
         bounces={false}
+        onEndReached={nextPage}
+        onEndReachedThreshold={0.5}
         ListFooterComponent={
           hasMore && (
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity onPress={nextPage} style={styles.button}>
-                <Plus width={50} height={50} />
-              </TouchableOpacity>
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#0000ff" />
             </View>
           )
         }
@@ -103,7 +108,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginVertical: 8,
     borderRadius: 8,
-    marginHorizontal: 5,
+    marginHorizontal: 8,
   },
   coinImage: {
     width: 50,
@@ -131,20 +136,8 @@ const styles = StyleSheet.create({
   },
   changeText: {
     fontSize: 16,
-    color: 'green',
+    color: 'black',
     fontWeight: '800',
-  },
-  buttonContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 15,
-  },
-  button: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: 'black',
   },
 });
 
