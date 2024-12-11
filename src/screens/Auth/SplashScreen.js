@@ -10,7 +10,7 @@ const SplashScreen = ({navigation}) => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (true) {
+      if (isLogged) {
         navigation.replace(routes.APP_NAVIGATOR);
       } else {
         navigation.replace(routes.AUTH_NAVIGATOR ,{screen:routes.LOGIN})
@@ -20,7 +20,7 @@ const SplashScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Splash Screen</Text>
+      <Text style={styles.title}>Coin Traker</Text>
     </SafeAreaView>
   );
 };
@@ -30,12 +30,12 @@ export default SplashScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: '#2D4840',
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
     color: 'white',
-    fontSize: 25,
+    fontSize: 45,
   },
 });

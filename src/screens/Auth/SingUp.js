@@ -23,8 +23,8 @@ const SingUp = ({navigation}) => {
   };
 
   const onPressRegister = async () => {
-   if (password !== rePassword) {
-      Alert.alert('Hata', 'Şifreler uyuşmuyor');
+    if (password !== rePassword) {
+      Alert.alert('Passwords do not match');
       return;
     }
     try {
@@ -67,7 +67,11 @@ const SingUp = ({navigation}) => {
           title="SingUp"
           onPress={onPressRegister}
           loading={loading}
-          isDisabled={email.trim() === '' || password.trim() === '' || rePassword.trim() === ''}
+          isDisabled={
+            email.trim() === '' ||
+            password.trim() === '' ||
+            rePassword.trim() === ''
+          }
         />
       </View>
     </SafeAreaView>
@@ -79,7 +83,7 @@ export default SingUp;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#6a5acd',
+    backgroundColor: '#2D4840',
   },
   header: {
     justifyContent: 'center',

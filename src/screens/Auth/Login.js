@@ -1,4 +1,11 @@
-import {Alert, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 
 import CustomInput from '../../components/Input';
@@ -19,13 +26,15 @@ const Login = ({navigation}) => {
 
   const handleLogin = async () => {
     try {
-      
+      if (email === 'aa@mail.com' || password === '123123') {
+        dispatch(login());
+        console.log('Giriş yapıldı');
 
-      /* await dispatch(login()); */
-      console.log('Giriş yapıldı');
-      
-      setLoading(false);
-      navigation.replace(routes.APP_NAVIGATOR);
+        setLoading(false);
+        navigation.replace(routes.APP_NAVIGATOR);
+      } else {
+        Alert.alert('E-mail and password cannot be empty');
+      }
     } catch (error) {
       setLoading(false);
       console.log('HATAA', error);
@@ -38,6 +47,7 @@ const Login = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* <KeyboardAvoidingView behavior="padding"> */}
       <View style={styles.header}>
         <Text style={styles.headerText}>Login</Text>
       </View>
@@ -58,6 +68,7 @@ const Login = ({navigation}) => {
         />
         <CustomButton title="Register" onPress={goSingUp} />
       </View>
+      {/* </KeyboardAvoidingView> */}
     </SafeAreaView>
   );
 };
@@ -67,7 +78,7 @@ export default Login;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#6a5acd',
+    backgroundColor: '#2D4840',
   },
   header: {
     justifyContent: 'center',
