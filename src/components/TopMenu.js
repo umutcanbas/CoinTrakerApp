@@ -4,6 +4,7 @@ import React from 'react';
 import BackIcon from '../assets/icons/back.svg';
 import Heart from '../assets/icons/heart-fill.svg';
 import Settings from '../assets/icons/settings.svg';
+import Logout from '../assets/icons/logout.svg';
 
 const TopMenu = ({
   onPressLeft,
@@ -17,6 +18,7 @@ const TopMenu = ({
     Heart: <Heart width={28} height={28} />,
     HeartRed: <Heart width={28} height={28} fill="red" />,
     Settings: <Settings width={28} height={28} />,
+    Logout: <Logout width={28} height={28} />,
   };
 
   return (
