@@ -88,7 +88,7 @@ const Home = ({navigation}) => {
         ListFooterComponent={
           hasMore && (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#0000ff" />
+              <ActivityIndicator size="large" color="black" />
             </View>
           )
         }
@@ -138,6 +138,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
     fontWeight: '800',
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

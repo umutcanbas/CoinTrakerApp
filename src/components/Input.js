@@ -46,11 +46,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8ff',
   },
   input: {
-    width: 300,
+    width: 350,
     color: 'black',
-    marginLeft:10
+    marginLeft: 10,
   },
   icon: {
     padding: 5,
   },
-})
+});
