@@ -17,7 +17,6 @@ import routes from '../../navigation/routes';
 
 const Favorites = ({navigation}) => {
   const favoriteList = useSelector(state => state.slice.favoriteList);
-  //console.log(JSON.stringify(favoriteList, null, 2));
 
   const goDetail = item => {
     navigation.navigate(routes.OUTTAB_NAVIGATOR, {
@@ -26,9 +25,17 @@ const Favorites = ({navigation}) => {
     });
   };
 
+  const goSettings = () => {
+    navigation.navigate(routes.OUTTAB_NAVIGATOR, {screen: routes.SETTINGS});
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <TopMenu title="Favorites" onPressRight={()=>console.log('aaaa')} rightIcon='Settings' />
+      <TopMenu
+        title="Favorites"
+        onPressRight={goSettings}
+        rightIcon="Settings"
+      />
       <ScrollView style={styles.content} bounces={false}>
         {favoriteList.map((item, index) => (
           <TouchableOpacity
