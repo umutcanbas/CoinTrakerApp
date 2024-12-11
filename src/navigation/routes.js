@@ -8,6 +8,7 @@ export const routes = {
   HOME: 'Home',
   FAVORITES: 'Favorites',
   COINDETAIL: 'CoinDetail',
+  SETTINGS: 'Settings',
 };
 
 export default routes;
