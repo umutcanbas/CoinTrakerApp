@@ -14,12 +14,13 @@ import routes from '../../navigation/routes';
 
 import TopMenu from '../../components/TopMenu';
 
-import {getData} from '../../hooks/useFetch';
+import {getData} from '../../hooks/useFetchData';
 
 const Home = ({navigation}) => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  /* const [currency, setCurrency] = useState([]); */
 
   useEffect(() => {
     const fetchCoins = async () => {
@@ -36,6 +37,15 @@ const Home = ({navigation}) => {
 
   const nextPage = () => setPage(prevPage => prevPage + 1);
 
+  /*   useEffect(() => {
+    const fetchCurrency = async () => {
+      const newData = await getData();
+      setData(newData);
+    };
+
+    fetchCurrency();
+  }, []); */
+
   const renderItem = ({item}) => (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -49,8 +59,8 @@ const Home = ({navigation}) => {
         <Image source={{uri: item?.image}} style={styles.coinImage} />
 
         <View style={styles.infoContainer}>
-          <Text style={styles?.nameText}>
-            {item.name} ({item.symbol.toUpperCase()})
+          <Text style={styles.nameText}>
+            {item.name} ({item?.symbol.toUpperCase()})
           </Text>
 
           <Text style={styles.priceText}>
