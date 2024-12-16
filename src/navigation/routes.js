@@ -9,6 +9,7 @@ export const routes = {
   FAVORITES: 'Favorites',
   COINDETAIL: 'CoinDetail',
   SETTINGS: 'Settings',
+  CURRENCY_SETTINGS: 'CurrencySettings',
 };
 
 export default routes;
