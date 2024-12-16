@@ -20,7 +20,7 @@ const Home = ({navigation}) => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  /* const [currency, setCurrency] = useState([]); */
+
 
   useEffect(() => {
     const fetchCoins = async () => {
@@ -37,14 +37,7 @@ const Home = ({navigation}) => {
 
   const nextPage = () => setPage(prevPage => prevPage + 1);
 
-  /*   useEffect(() => {
-    const fetchCurrency = async () => {
-      const newData = await getData();
-      setData(newData);
-    };
 
-    fetchCurrency();
-  }, []); */
 
   const renderItem = ({item}) => (
     <TouchableOpacity
