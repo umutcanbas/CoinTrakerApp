@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "xcode": "open ios/MyApp.xcworkspace"
+    "xcode": "open ios/MyApp.xcworkspace",
+    "pod": "cd ios && pod install && cd .."
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^7.1.3",
