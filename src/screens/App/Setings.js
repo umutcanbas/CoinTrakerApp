@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import TopMenu from '../../components/TopMenu';
 
@@ -21,6 +21,13 @@ const Setings = ({navigation}) => {
     dispatch(logout());
     navigation.replace(routes.AUTH_NAVIGATOR);
   };
+
+  const goCurrencySettings = () => {
+    navigation.navigate(routes.OUTTAB_NAVIGATOR, {
+      screen: routes.CURRENCY_SETTINGS,
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <TopMenu
@@ -29,6 +36,11 @@ const Setings = ({navigation}) => {
         onPressRight={logOut}
         rightIcon="Logout"
       />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => goCurrencySettings()}>
+        <Text style={styles.buttonText}>Currency Settings</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -39,5 +51,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#2D4840',
+  },
+  button: {
+    backgroundColor: '#F2F2F2',
+    margin: 10,
+    padding: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'blackF',
   },
 });
