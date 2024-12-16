@@ -21,6 +21,9 @@ const Home = ({navigation}) => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
+  const goSettings = () => {
+    navigation.navigate(routes.OUTTAB_NAVIGATOR, {screen: routes.SETTINGS});
+  };
 
   useEffect(() => {
     const fetchCoins = async () => {
@@ -36,8 +39,6 @@ const Home = ({navigation}) => {
   }, [page]);
 
   const nextPage = () => setPage(prevPage => prevPage + 1);
-
-
 
   const renderItem = ({item}) => (
     <TouchableOpacity
@@ -80,7 +81,11 @@ const Home = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TopMenu title="Coin Tracker" />
+      <TopMenu
+        title="Coin Tracker"
+        onPressRight={goSettings}
+        rightIcon="Settings"
+      />
       <FlatList
         data={data}
         keyExtractor={(item, index) => `${item.id}-${index}`}
