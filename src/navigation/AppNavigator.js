@@ -32,7 +32,7 @@ const AppNavigator = () => {
             IconComponent = focused ? ProfileFill : Profile;
           }
 
-          return <IconComponent width={24} height={24} />;
+          return <IconComponent width={33} height={33} style={{marginTop:20}} />;
         },
       })}>
       <Tab.Screen name={routes.HOME} component={Home} />
