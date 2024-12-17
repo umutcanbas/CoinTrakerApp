@@ -12,9 +12,23 @@ import TopMenu from '../../components/TopMenu';
 
 import {getAllCurrencies} from '../../hooks/useFetchCurrency';
 
+import {useDispatch, useSelector} from 'react-redux';
+import {changeCurrency} from '../../redux/slice';
+
 const CurrencySettings = ({navigation}) => {
   const [currencies, setCurrencies] = useState([]);
   const [selectedCurrency, setSelectedCurrency] = useState(null);
+
+  const dispatch = useDispatch();
+
+  const currentCurrencySave = useSelector(state => state.slice.currentCurrency);
+
+  console.log('Saved', currentCurrencySave);
+  console.log('Selected', selectedCurrency);
+
+  useEffect(() => {
+    setSelectedCurrency(currentCurrencySave);
+  }, [currentCurrencySave]);
 
   useEffect(() => {
     getCurrencies();
@@ -31,7 +45,11 @@ const CurrencySettings = ({navigation}) => {
   };
 
   const handleChooseCurrency = code => {
-    setSelectedCurrency(code); // Seçilen para biriminin kodunu kaydediyoruz
+    setSelectedCurrency(code);
+  };
+
+  const handleSaveCurrency = selectedCurrency => {
+    dispatch(changeCurrency(selectedCurrency));
   };
 
   const renderItem = ({item}) => (
@@ -59,10 +77,13 @@ const CurrencySettings = ({navigation}) => {
       />
 
       <FlatList data={currencies} renderItem={renderItem} bounces={false} />
-{/* reduxten gelen ile seili olan aynı ise gösterme */}
-      <TouchableOpacity style={styles.saveButton}>
-        <Text style={styles.saveButtonText}>Save</Text>
-      </TouchableOpacity>
+      {selectedCurrency === currentCurrencySave ? null : (
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={() => handleSaveCurrency(selectedCurrency)}>
+          <Text style={styles.saveButtonText}>Save</Text>
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 };

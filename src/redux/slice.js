@@ -8,9 +8,12 @@ const isLogged = storage.getBoolean('isLogged');
 const favoriteListStorage = storage.getString('favoriteList');
 const favoriteList = favoriteListStorage && JSON.parse(favoriteListStorage);
 
+const currentCurrency = storage.getString('currentCurrency');
+
 const initialState = {
   isLogged: isLogged || false,
   favoriteList: favoriteList || [],
+  currentCurrency : currentCurrency || 'USD',
 };
 
 const slice = createSlice({
@@ -49,6 +52,13 @@ const slice = createSlice({
 
       storage.set('favoriteList', JSON.stringify(state.favoriteList));
     },
+    changeCurrency: (state, action) => {
+      if (typeof action.payload === 'string') {
+        state.currentCurrency = action.payload;
+      } else {
+        console.error('Invalid currency type:', typeof action.payload);
+      }
+    },
   },
 });
 
@@ -58,6 +68,7 @@ export const {
   addFavorite,
   clearFavorites,
   changeFavoriteList,
+  changeCurrency,
 } = slice.actions;
 
 export default slice.reducer;
