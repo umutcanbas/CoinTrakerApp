@@ -16,10 +16,30 @@ import TopMenu from '../../components/TopMenu';
 
 import {getData} from '../../hooks/useFetchData';
 
+import {changeCurrency} from '../../hooks/useFetchCurrency';
+
+import {useSelector} from 'react-redux';
+
 const Home = ({navigation}) => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [multiplier, setMultiplier] = useState();
+
+  const currentCurrency = useSelector(state => state.slice.currentCurrency);
+
+  const fetchCurrency = async () => {
+    try {
+      const newMultiplier = await changeCurrency(currentCurrency);
+      setMultiplier(newMultiplier.result);
+    } catch (error) {
+      console.log('fetchCurrency error ', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCurrency();
+  }, [currentCurrency]);
 
   const goSettings = () => {
     navigation.navigate(routes.OUTTAB_NAVIGATOR, {screen: routes.SETTINGS});
@@ -58,7 +78,8 @@ const Home = ({navigation}) => {
           </Text>
 
           <Text style={styles.priceText}>
-            Price: ${item?.current_price.toLocaleString()}
+            Price: {(item?.current_price * multiplier).toLocaleString()}{' '}
+            {currentCurrency}
           </Text>
 
           <Text style={styles.marketText}>

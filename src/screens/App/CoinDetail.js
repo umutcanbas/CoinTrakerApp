@@ -1,5 +1,5 @@
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import TopMenu from '../../components/TopMenu';
 
@@ -7,8 +7,12 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {changeFavoriteList} from '../../redux/slice';
 
+import {changeCurrency} from '../../hooks/useFetchCurrency';
+
 const CoinDetail = ({route, navigation}) => {
   const data = route.params?.item;
+
+  const [multiplier, setMultiplier] = useState();
 
   const dispatch = useDispatch();
 
@@ -24,12 +28,25 @@ const CoinDetail = ({route, navigation}) => {
     dispatch(changeFavoriteList(data));
   };
 
-  const Dolar = () => <Text style={styles.dolar}>$</Text>;
+  const currentCurrency = useSelector(state => state.slice.currentCurrency);
 
-  const infoData = [
-    {label: 'Current Price', value: data.current_price},
-    {label: '24h High', value: data.high_24h},
-    {label: '24h Low', value: data.low_24h},
+  const fetchCurrency = async () => {
+    try {
+      const newMultiplier = await changeCurrency(currentCurrency);
+      setMultiplier(newMultiplier.result);
+    } catch (error) {
+      console.log('fetchCurrency error ', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCurrency();
+  }, [currentCurrency]);
+
+  const infoData = [ 
+    {label: 'Current Price', value: (data.current_price * multiplier).toLocaleString()},
+    {label: '24h High', value: (data.high_24h * multiplier).toLocaleString()},
+    {label: '24h Low', value: (data.low_24h * multiplier).toLocaleString()},
     {label: '24h Price Change', value: data.price_change_24h.toFixed(2)},
     {
       label: '24h Price Change %',
@@ -54,7 +71,7 @@ const CoinDetail = ({route, navigation}) => {
             <Text style={styles.text}>{item.label}</Text>
             <Text
               style={[styles.money, {color: item.value < 0 ? 'red' : 'green'}]}>
-              {item.value} <Dolar />
+              {item.value}
             </Text>
           </View>
         ))}
@@ -98,10 +115,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 27,
     color: 'white',
-  },
-  dolar: {
-    color: 'green',
-    fontWeight: 'bold',
-    fontSize: 25,
   },
 });

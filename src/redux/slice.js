@@ -13,7 +13,7 @@ const currentCurrency = storage.getString('currentCurrency');
 const initialState = {
   isLogged: isLogged || false,
   favoriteList: favoriteList || [],
-  currentCurrency : currentCurrency || 'USD',
+  currentCurrency: currentCurrency || 'USD',
 };
 
 const slice = createSlice({
@@ -33,31 +33,24 @@ const slice = createSlice({
       storage.set('favoriteList', JSON.stringify(state.favoriteList));
     },
     changeFavoriteList: (state, action) => {
-      const place = action.payload;
+      const coin = action.payload;
 
-      if (!place || !place.id) {
-        console.error('Geçersiz place:', place);
-        return;
-      }
-
-      const isFavorite = state.favoriteList.find(item => item.id === place.id);
+      const isFavorite = state.favoriteList.find(item => item.id === coin.id);
 
       if (isFavorite) {
         state.favoriteList = state.favoriteList.filter(
-          item => item.id !== place.id,
+          item => item.id !== coin.id,
         );
       } else {
-        state.favoriteList.push(place);
+        state.favoriteList.push(coin);
       }
 
       storage.set('favoriteList', JSON.stringify(state.favoriteList));
     },
     changeCurrency: (state, action) => {
-      if (typeof action.payload === 'string') {
-        state.currentCurrency = action.payload;
-      } else {
-        console.error('Invalid currency type:', typeof action.payload);
-      }
+      state.currentCurrency = action.payload;
+
+      storage.set('currentCurrency', JSON.stringify(state.currentCurrency));
     },
   },
 });
