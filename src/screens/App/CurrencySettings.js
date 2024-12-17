@@ -23,9 +23,6 @@ const CurrencySettings = ({navigation}) => {
 
   const currentCurrencySave = useSelector(state => state.slice.currentCurrency);
 
-  console.log('Saved', currentCurrencySave);
-  console.log('Selected', selectedCurrency);
-
   useEffect(() => {
     setSelectedCurrency(currentCurrencySave);
   }, [currentCurrencySave]);
