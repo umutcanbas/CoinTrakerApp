@@ -1,7 +1,7 @@
 export const changeCurrency = async currency => {
   try {
     const response = await fetch(
-      `https://api.currencylayer.com/convert?access_key=feb9630e0d0fb98a57d28e10918222dc&from=USD&to=${currency}&amount=1&date=2024-11-11`,
+      `https://api.currencylayer.com/convert?access_key=YOUR_API_KEY&from=USD&to=${currency}&amount=1&date=2024-11-11`,
     );
 
     if (!response.ok) {
@@ -19,7 +19,7 @@ export const changeCurrency = async currency => {
 export const getAllCurrencies = async page => {
   try {
     const response = await fetch(
-      `https://api.currencylayer.com/list?access_key=feb9630e0d0fb98a57d28e10918222dc`,
+      `https://api.currencylayer.com/list?access_key=YOUR_API_KEY`,
     );
 
     if (!response.ok) {
