@@ -34,7 +34,6 @@ const Home = ({navigation}) => {
     const fetchCurrency = async () => {
       try {
         const newMultiplier = await changeCurrency(currentCurrency);
-        console.log(currentCurrency);
         setMultiplier(newMultiplier.result);
       } catch (error) {
         console.log('fetchCurrency error ', error);
