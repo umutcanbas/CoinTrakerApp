@@ -8,12 +8,13 @@ const isLogged = storage.getBoolean('isLogged');
 const favoriteListStorage = storage.getString('favoriteList');
 const favoriteList = favoriteListStorage && JSON.parse(favoriteListStorage);
 
-const currentCurrency = storage.getString('currentCurrency');
+const currentCurrencyValue = storage.getString('currentCurrency');
+const currentCurrency = JSON.parse(currentCurrencyValue) || 'USD';
 
 const initialState = {
   isLogged: isLogged || false,
   favoriteList: favoriteList || [],
-  currentCurrency: currentCurrency || 'USD',
+  currentCurrency,
 };
 
 const slice = createSlice({
