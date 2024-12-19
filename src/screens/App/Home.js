@@ -8,36 +8,39 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
 
 import routes from '../../navigation/routes';
-
 import TopMenu from '../../components/TopMenu';
+import Search from '../../components/Search';
 
 import {getData} from '../../hooks/useFetchData';
-
 import {changeCurrency} from '../../hooks/useFetchCurrency';
 
 import {useSelector} from 'react-redux';
 
 const Home = ({navigation}) => {
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [multiplier, setMultiplier] = useState();
+  const [searchText, setSearchText] = useState('');
 
   const currentCurrency = useSelector(state => state.slice.currentCurrency);
 
-  const fetchCurrency = async () => {
-    try {
-      const newMultiplier = await changeCurrency(currentCurrency);
-      setMultiplier(newMultiplier.result);
-    } catch (error) {
-      console.log('fetchCurrency error ', error);
-    }
-  };
-
   useEffect(() => {
+    const fetchCurrency = async () => {
+      try {
+        const newMultiplier = await changeCurrency(currentCurrency);
+        console.log(currentCurrency);
+        setMultiplier(newMultiplier.result);
+      } catch (error) {
+        console.log('fetchCurrency error ', error);
+      }
+    };
+
     fetchCurrency();
   }, [currentCurrency]);
 
@@ -57,6 +60,19 @@ const Home = ({navigation}) => {
 
     fetchCoins();
   }, [page]);
+
+  //Seacrh bar
+  useEffect(() => {
+    if (searchText === '') {
+      setFilteredData(data);
+    } else {
+      const filtered = data.filter(item =>
+        item.name.toLowerCase().startsWith(searchText.toLowerCase()),
+      );
+      setFilteredData(filtered);
+      setHasMore(false);
+    }
+  }, [searchText, data]);
 
   const nextPage = () => setPage(prevPage => prevPage + 1);
 
@@ -102,26 +118,45 @@ const Home = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TopMenu
-        title="Coin Tracker"
-        onPressRight={goSettings}
-        rightIcon="Settings"
-      />
-      <FlatList
-        data={data}
-        keyExtractor={(item, index) => `${item.id}-${index}`}
-        renderItem={renderItem}
-        bounces={false}
-        onEndReached={nextPage}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={
-          hasMore && (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="black" />
-            </View>
-          )
-        }
-      />
+      <KeyboardAvoidingView>
+        <TopMenu
+          title="Coin Tracker"
+          onPressRight={goSettings}
+          rightIcon="Settings"
+        />
+
+        <FlatList
+          data={filteredData}
+          keyExtractor={(item, index) => `${item.id}-${index}`}
+          renderItem={renderItem}
+          bounces={false}
+          onEndReached={nextPage}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={
+            filteredData.length > 0 &&
+            hasMore && (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="black" />
+              </View>
+            )
+          }
+          ListHeaderComponent={
+            <Search
+              placeholder="Search Coins..."
+              onChangeText={text => setSearchText(text)}
+              value={searchText}
+            />
+          }
+          ListEmptyComponent={
+            filteredData.length === 0 &&
+            !hasMore && (
+              <View style={styles.emptyContaier}>
+                <Text style={styles.emptyContaierText}>No coin found!</Text>
+              </View>
+            )
+          }
+        />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -171,6 +206,18 @@ const styles = StyleSheet.create({
   loadingContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  emptyContaier: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 220,
+  },
+  emptyContaierText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 35,
+    fontStyle: 'italic',
   },
 });
 

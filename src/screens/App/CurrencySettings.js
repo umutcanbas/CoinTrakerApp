@@ -6,19 +6,23 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 
 import TopMenu from '../../components/TopMenu';
+import Search from '../../components/Search';
 
 import {getAllCurrencies} from '../../hooks/useFetchCurrency';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {changeCurrency} from '../../redux/slice';
 
+import routes from '../../navigation/routes';
+
 const CurrencySettings = ({navigation}) => {
   const [currencies, setCurrencies] = useState([]);
   const [selectedCurrency, setSelectedCurrency] = useState(null);
-
+  const [searchText, setSearchText] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
   const dispatch = useDispatch();
 
   const currentCurrencySave = useSelector(state => state.slice.currentCurrency);
@@ -47,7 +51,20 @@ const CurrencySettings = ({navigation}) => {
 
   const handleSaveCurrency = selectedCurrency => {
     dispatch(changeCurrency(selectedCurrency));
+    navigation.navigate(routes.APP_NAVIGATOR, {screen: routes.HOME});
   };
+
+  useEffect(() => {
+    if (searchText === '') {
+      setFilteredData(currencies);
+    } else {
+      const filtered = currencies.filter(item =>
+        item.name.toLowerCase().startsWith(searchText.toLowerCase()),
+      );
+      setFilteredData(filtered);
+
+    }
+  }, [searchText, currencies]);
 
   const renderItem = ({item}) => (
     <TouchableOpacity
@@ -73,7 +90,18 @@ const CurrencySettings = ({navigation}) => {
         onPressLeft={() => navigation.goBack()}
       />
 
-      <FlatList data={currencies} renderItem={renderItem} bounces={false} />
+      <FlatList
+        data={filteredData}
+        renderItem={renderItem}
+        bounces={false}
+        ListHeaderComponent={
+          <Search
+            placeholder="Search Currency..."
+            onChangeText={text => setSearchText(text)}
+            value={searchText}
+          />
+        }
+      />
       {selectedCurrency === currentCurrencySave ? null : (
         <TouchableOpacity
           style={styles.saveButton}
