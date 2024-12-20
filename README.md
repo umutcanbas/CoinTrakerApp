@@ -1,4 +1,25 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+## Finance App
+<img src='screenshots/ss1.png' height='400' /> <img src='screenshots/ss2.png' height='400' /> <img src='screenshots/ss3.png' height='400' />
+<img src='screenshots/ss4.png' height='400' /> <img src='screenshots/ss5.png' height='400' /> <img src='screenshots/ss6.png' height='400' /> 
+<img src='screenshots/ss7.png' height='400' /> 
+
+# Technology
+- React Native
+
+# Tools
+
+- React Navigation
+- Redux
+- Redux-Toolkit
+- MMKV
+
+## Features
+
+- Creating an account and logging 
+- Listing and searching coins
+- Add and list favorites
+- List and exchange currencies
+
 
 # Getting Started
 
@@ -77,4 +98,4 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
-# CoinTrakerApp
+# Finance App
